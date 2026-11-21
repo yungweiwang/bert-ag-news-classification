@@ -33,11 +33,25 @@ Python, PyTorch, Transformers, Hugging Face,
 scikit-learn, pandas, Matplotlib, Google Colab.
 
 ## Usage
+
 Install dependencies:
 
-    pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+```
 
-Place the fine-tuned model files in bert-ag-news-model/,
-then run:
+Run the classifier:
 
-    python predict.py
+```bash
+python predict.py
+```
+
+The fine-tuned BERT model is automatically downloaded from [Hugging Face](https://huggingface.co/uniofedin0304/bert-ag-news-classification).
+
+## Example Prediction
+
+**Input:** NASA announces a new mission to explore Mars.
+
+**Predicted category:** Sci/Tech
+
+**Confidence:** 98.08%
