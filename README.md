@@ -55,3 +55,18 @@ The fine-tuned BERT model is automatically downloaded from [Hugging Face](https:
 **Predicted category:** Sci/Tech
 
 **Confidence:** 98.08%
+
+## Reproducibility
+
+The fine-tuned BERT model is publicly available on [Hugging Face](https://huggingface.co/uniofedin0304/bert-ag-news-classification).
+
+The inference pipeline was successfully tested in a fresh Google Colab environment without retraining or requiring local model files.
+
+**Example output:**
+```text
+Input: NASA announces a new mission to explore Mars.
+Prediction: Sci/Tech
+Confidence: 98.08%
+```
+
+The model automatically downloads its weights and tokenizer from Hugging Face when running `predict.py`.
