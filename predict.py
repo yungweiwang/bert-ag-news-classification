@@ -1,44 +1,42 @@
 
 import torch
-from transformers import (
-    AutoTokenizer,
-    AutoModelForSequenceClassification
-)
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-MODEL_PATH = "./bert-ag-news-model"
+MODEL_ID = "uniofedin0304/bert-ag-news-classification"
 
-tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH)
-model = AutoModelForSequenceClassification.from_pretrained(
-    MODEL_PATH
-)
+LABELS = ["World", "Sports", "Business", "Sci/Tech"]
 
-device = torch.device(
-    "cuda" if torch.cuda.is_available() else "cpu"
-)
-model.to(device)
+tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
+model = AutoModelForSequenceClassification.from_pretrained(MODEL_ID)
+
 model.eval()
 
-def predict_news(text):
+def predict(text):
     inputs = tokenizer(
         text,
         return_tensors="pt",
         truncation=True,
+        padding=True,
         max_length=128
-    ).to(device)
+    )
 
     with torch.no_grad():
-        logits = model(**inputs).logits
-        probabilities = torch.softmax(logits, dim=-1)[0]
+        outputs = model(**inputs)
 
-    predicted_id = probabilities.argmax().item()
+    probabilities = torch.softmax(outputs.logits, dim=-1)
+
+    predicted_class = torch.argmax(probabilities, dim=-1).item()
+    confidence = probabilities[0, predicted_class].item()
 
     return {
-        "category": model.config.id2label[predicted_id],
-        "confidence": round(
-            probabilities[predicted_id].item(), 4
-        )
+        "category": LABELS[predicted_class],
+        "confidence": round(confidence, 4)
     }
 
+
 if __name__ == "__main__":
-    text = input("Enter a news article: ")
-    print(predict_news(text))
+    text = input("Enter a news headline: ")
+    result = predict(text)
+    print(result)
+
+
